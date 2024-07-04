@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deudas</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div id="alertContainer"></div>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Número Documento</th>
+        <th>Nombre Empresa</th>
+        <th>Fecha Vencimiento</th>
+        <th>Monto</th>
+        <th>Imagen</th>
+        <th>Estado</th>
+        <th>Acción</th>
+    </tr>
+    </thead>
+    <tbody id="deudasTable">
+    <!-- Filas generadas dinámicamente -->
+    </tbody>
+</table>
+
+<script>
+    function fetchDeudas() {
+        fetch('/api/deuda/mes/nopagadas')
+            .then(response => response.json())
+            .then(data => {
+                const deudasTable = document.getElementById('deudasTable');
+                const alertContainer = document.getElementById('alertContainer');
+                const today = new Date().toISOString().split('T')[0]; // Obtener la fecha actual en formato YYYY-MM-DD
+
+                data.forEach(deuda => {
+                    const row = document.createElement('tr');
+
+                    row.innerHTML = `
+                            <td>${deuda.id}</td>
+                            <td>${deuda.numeroDocumento}</td>
+                            <td>${deuda.nombreEmpresa}</td>
+                            <td>${deuda.fechaVencimiento}</td>
+                            <td>${deuda.monto}</td>
+                            <td><img src="${deuda.imagen}" alt="Imagen" width="50"/></td>
+                            <td>${deuda.estaPagado ? 'Pagado' : 'No Pagado'}</td>
+                            <td>
+                                ${!deuda.estaPagado ? `<button onclick="marcarComoPagada(${deuda.id})">Marcar como Pagada</button>` : ''}
+                            </td>
+                        `;
+
+                    deudasTable.appendChild(row);
+
+                    // Mostrar alerta si la deuda vence hoy
+                    if (deuda.fechaVencimiento === today && !deuda.estaPagado) {
+                        const alert = document.createElement('div');
+                        alert.innerHTML = `
+                                <div style="background-color: red; color: white; padding: 10px; margin-bottom: 10px;">
+                                    Alerta: La deuda con número de documento ${deuda.numeroDocumento} de la empresa ${deuda.nombreEmpresa} vence hoy.
+                                </div>
+                            `;
+                        alertContainer.appendChild(alert);
+                    }
+                });
+            });
+    }
+
+    function marcarComoPagada(id) {
+        fetch(`/api/deuda/${id}/pagar`, {
+            method: 'PUT'
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Deuda marcada como pagada');
+                    window.location.reload(); // Recargar la página para actualizar la tabla
+                } else {
+                    alert('Error al marcar la deuda como pagada');
+                }
+            });
+    }
+
+    // Llamar a la función fetchDeudas al cargar la página
+    window.onload = fetchDeudas;
+</script>
+</body>
+</html>
