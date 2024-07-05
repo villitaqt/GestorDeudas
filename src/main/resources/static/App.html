@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+<div>
+
+</div>
 <div id="alertContainer"></div>
 <table>
     <thead>
@@ -28,7 +31,7 @@
 
 <script>
     function fetchDeudas() {
-        fetch('/api/deuda/mes/nopagadas')
+        fetch('/api/deudas/mes/nopagadas')
             .then(response => response.json())
             .then(data => {
                 const deudasTable = document.getElementById('deudasTable');
@@ -44,7 +47,7 @@
                             <td>${deuda.nombreEmpresa}</td>
                             <td>${deuda.fechaVencimiento}</td>
                             <td>${deuda.monto}</td>
-                            <td><img src="${deuda.imagen}" alt="Imagen" width="50"/></td>
+                            <td>${deuda.imagen}</td>
                             <td>${deuda.estaPagado ? 'Pagado' : 'No Pagado'}</td>
                             <td>
                                 ${!deuda.estaPagado ? `<button onclick="marcarComoPagada(${deuda.id})">Marcar como Pagada</button>` : ''}
@@ -68,7 +71,7 @@
     }
 
     function marcarComoPagada(id) {
-        fetch(`/api/deuda/${id}/pagar`, {
+        fetch(`/api/deudas/${id}/pagar`, {
             method: 'PUT'
         })
             .then(response => {
