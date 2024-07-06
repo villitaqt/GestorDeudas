@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deudas</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="js/script.js"></script>
 </head>
 <body>
-<!-- Botón para redirigir a la página de registro de deuda -->
-
-
-<div class="container">
-    <div class="mb-3">
-        <button class="btn" onclick="redirigirRegistro()">Registrar Nueva Deuda</button>
-    </div>
+<!-- Botones para navegar entre meses -->
+<div style="text-align: center; margin-bottom: 20px;">
+    <button onclick="retrocederMes()">◀</button>
     <h1 id="nombreMes"></h1>
+    <button onclick="avanzarMes()">▶</button>
+</div>
+
+<div>
+    <button onclick="redirigirRegistro()">Registar una nueva deuda</button>
+</div>
+<div class="container-lg mt-5" style="max-width: 960px;">
     <div id="alertContainer"></div>
-    <table id="deudasTable">
+    <table id="deudasTable" class="table table-striped">
         <thead>
         <tr>
             <th>Número de Documento</th>
@@ -33,7 +36,5 @@
         </tbody>
     </table>
 </div>
-
-<script src="js/script.js"></script>
 </body>
 </html>

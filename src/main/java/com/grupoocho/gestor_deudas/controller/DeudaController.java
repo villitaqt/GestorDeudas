@@ -36,6 +36,11 @@ public class DeudaController {
         return deudaService.getDeudasDelMesActualYNoPagadas();
     }
 
+    @GetMapping("/por-mes")
+    public List<Deuda> getDeudasPorMes(@RequestParam("mes") int mes, @RequestParam("anio") int anio) {
+        return deudaService.obtenerDeudasPorMes(mes, anio);
+    }
+
     @PutMapping("/{id}/pagar")
     public ResponseEntity<Deuda> marcarDeudaComoPagada(@PathVariable Long id) {
         Optional<Deuda> deudaOptional = deudaService.marcarDeudaComoPagada(id);
