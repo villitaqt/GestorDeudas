@@ -109,7 +109,7 @@ function generateRowContent(deuda, fechaVencimiento, montoFormateado, today) {
             ${deuda.estaPagado ? '<i class="fas fa-check"></i>' : (fechaVencimiento < today && !deuda.estaPagado ? 'VENCIDA' : '<i class="fas fa-minus"></i>')}
         </td>
         <td>
-            ${!deuda.estaPagado ? `<button class="btn" onclick="marcarComoPagada(${deuda.id})">Marcar como Pagada</button>` : '<button class="btn" disabled>Pagado</button>'}
+            ${!deuda.estaPagado ? `<button class="btn" onclick="marcarComoPagada(${deuda.id})">Marcar como Pagada</button>` : '<button class="btn" disabled>Deuda Pagada</button>'}
         </td>
     `;
 }
@@ -143,7 +143,7 @@ function marcarComoPagada(deudaId) {
 
 // Redirige a la página de registro de deuda
 function redirigirRegistro() {
-    window.location.href = '/registrar_deuda.html';
+    window.location.href = '../html/registrar_deuda.html';
 }
 
 // Función para avanzar al siguiente mes
