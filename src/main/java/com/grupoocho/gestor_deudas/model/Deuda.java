@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 @Data
@@ -27,6 +26,15 @@ public class Deuda {
     private BigDecimal monto;
     private String imagen;
     private boolean estaPagado;
+
+    public Deuda(String numeroDocumento, String nombreDeudor, String nombreEmpresa, LocalDate fechaVencimiento, BigDecimal monto, boolean estaPagado) {
+        this.numeroDocumento = numeroDocumento;
+        this.nombreDeudor = nombreDeudor;
+        this.nombreEmpresa = nombreEmpresa;
+        this.fechaVencimiento = fechaVencimiento;
+        this.monto = monto;
+        this.estaPagado = estaPagado;
+    }
 
     // Constructor, getters y setters omitidos por brevedad
 }

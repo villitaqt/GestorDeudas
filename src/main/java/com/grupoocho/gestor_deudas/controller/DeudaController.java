@@ -2,10 +2,18 @@ package com.grupoocho.gestor_deudas.controller;
 
 import com.grupoocho.gestor_deudas.model.Deuda;
 import com.grupoocho.gestor_deudas.service.DeudaService;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +42,16 @@ public class DeudaController {
     @GetMapping("/mes/nopagadas")
     public List<Deuda> getDeudasDelMesActualYNoPagadas() {
         return deudaService.getDeudasDelMesActualYNoPagadas();
+    }
+
+    @PostMapping("/upload/{cronogramaId}")
+    public void uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long cronogramaId) {
+        try {
+            deudaService.processFile(file, cronogramaId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al procesar el archivo", e);
+        }
     }
 
     @GetMapping("/por-mes")

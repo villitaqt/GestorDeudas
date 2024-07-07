@@ -8,6 +8,52 @@
     <script src="js/script.js"></script>
 </head>
 <body>
+<h1>Subir Archivo de Deudas</h1>
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type="submit">Subir</button>
+</form>
+
+<script>
+    document.getElementById('uploadForm').onsubmit = function(event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+
+        fetch('/api/deudas/subir', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.text())
+            .then(data => alert(data))
+            .catch(error => console.error('Error:', error));
+    };
+</script>
+<h2>Subir Archivo CSV</h2>
+<form id="uploadFormXXX" enctype="multipart/form-data">
+    <input type="file" id="fileInput" name="file" accept=".csv">
+    <button type="button" onclick="uploadFile()">Subir Archivo</button>
+</form>
+
+<div id="response"></div>
+
+<script>
+    function uploadFile() {
+        var formData = new FormData();
+        formData.append("file", document.getElementById("fileInput").files[0]);
+
+        fetch('api/deudas/subir', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(result => {
+                document.getElementById("response").innerText = result;
+            })
+            .catch(error => {
+                console.error('Error al subir el archivo:', error);
+                document.getElementById("response").innerText = 'Error al subir el archivo.';
+            });
+    }
+</script>
 <!-- Botones para navegar entre meses -->
 <div style="text-align: center; margin-bottom: 20px;">
     <button onclick="retrocederMes()">◀</button>
@@ -16,9 +62,9 @@
 </div>
 
 <div>
-    <button onclick="redirigirRegistro()">Registar una nueva deuda</button>
+    <button class="mb-3" onclick="redirigirRegistro()">Registar una nueva deuda</button>
 </div>
-<div class="container-lg mt-5" style="max-width: 960px;">
+<div class="container" style="max-width: 960px;">
     <div id="alertContainer"></div>
     <table id="deudasTable" class="table table-striped">
         <thead>
