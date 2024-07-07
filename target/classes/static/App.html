@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deudas</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/script.js"></script>
+</head>
+<body>
+<!-- Botones para navegar entre meses -->
+<div style="text-align: center; margin-bottom: 20px;">
+    <button onclick="retrocederMes()">◀</button>
+    <h1 id="nombreMes"></h1>
+    <button onclick="avanzarMes()">▶</button>
+</div>
+
+<div>
+    <button onclick="redirigirRegistro()">Registar una nueva deuda</button>
+</div>
+<div class="container-lg mt-5" style="max-width: 960px;">
+    <div id="alertContainer"></div>
+    <table id="deudasTable" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Número de Documento</th>
+            <th>Empresa</th>
+            <th>Fecha de Vencimiento</th>
+            <th>Monto</th>
+            <th>Pagado</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Aquí se agregarán las filas de la tabla -->
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
