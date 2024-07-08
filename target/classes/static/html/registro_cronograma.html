@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Cronograma con Letras</title>
+    <link rel="stylesheet" href="../css/style_registrar.css">
+</head>
+<body>
+<div class="container">
+    <h1>Crear Cronograma con Letras</h1>
+    <form id="formularioCronograma">
+        <label for="monto">Monto:</label>
+        <input type="number" id="monto" name="monto" required><br><br>
+
+        <label for="interes">Interés (%):</label>
+        <input type="number" id="interes" name="interes" required><br><br>
+
+        <label for="fechaDesembolso">Fecha de Desembolso:</label>
+        <input type="date" id="fechaDesembolso" name="fechaDesembolso" required><br><br>
+
+        <label for="plazo">Plazo:</label>
+        <input type="number" id="plazo" name="plazo" required><br><br>
+
+        <div id="letrasContainer">
+            <!-- Aquí se agregarán dinámicamente los campos de letras -->
+        </div>
+
+        <button type="submit">Guardar</button>
+        <button type="button" onclick="window.history.back()">Volver</button>
+    </form>
+    <div id="mensajeCronograma"></div>
+</div>
+
+<script>
+    const formulario = document.getElementById('formularioCronograma');
+    const mensaje = document.getElementById('mensajeCronograma');
+
+    formulario.addEventListener('submit', function(event) {
+        event.preventDefault(); // Evitar el envío estándar del formulario
+
+        const formData = new FormData(formulario);
+        const json = {};
+        formData.forEach((value, key) => { json[key] = value; });
+
+        const plazo = parseInt(json['plazo']);
+        if (plazo > 0) {
+            json['letras'] = [];
+
+            for (let i = 1; i <= plazo; i++) {
+                const letra = {
+                    numero: i,
+                    vencimiento: formData.get(`vencimiento-${i}`),
+                    saldo: parseFloat(formData.get(`saldo-${i}`)),
+                    capital: parseFloat(formData.get(`capital-${i}`)),
+                    interes: parseFloat(formData.get(`interes-letra-${i}`)),
+                    cuota: parseFloat(formData.get(`cuota-${i}`))
+                };
+                json['letras'].push(letra);
+            }
+        }
+
+        fetch('/api/cronograma/crear', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(json)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al registrar el cronograma');
+                }
+                return response.json();
+            })
+            .then(data => {
+                mensaje.textContent = 'Cronograma registrado correctamente con ID: ' + data.id;
+                formulario.reset();
+            })
+            .catch(error => {
+                mensaje.textContent = 'Error: ' + error.message;
+            });
+    });
+
+    const plazoInput = document.getElementById('plazo');
+    const letrasContainer = document.getElementById('letrasContainer');
+
+    plazoInput.addEventListener('input', function() {
+        const plazo = parseInt(plazoInput.value);
+
+        letrasContainer.innerHTML = ''; // Limpiar campos existentes
+
+        for (let i = 1; i <= plazo; i++) {
+            const letraHtml = `
+                <div>
+                    <h3>Letra ${i}</h3>
+                    <label for="vencimiento-${i}">Vencimiento:</label>
+                    <input type="date" id="vencimiento-${i}" name="vencimiento-${i}" required><br><br>
+
+                    <label for="saldo-${i}">Saldo:</label>
+                    <input type="number" id="saldo-${i}" name="saldo-${i}" step="0.01" required><br><br>
+
+                    <label for="capital-${i}">Capital:</label>
+                    <input type="number" id="capital-${i}" name="capital-${i}" step="0.01" required><br><br>
+
+                    <label for="interes-letra-${i}">Interés:</label>
+                    <input type="number" id="interes-letra-${i}" name="interes-letra-${i}" step="0.01" required><br><br>
+
+                    <label for="cuota-${i}">Cuota:</label>
+                    <input type="number" id="cuota-${i}" name="cuota-${i}" step="0.01" required><br><br>
+                </div>
+            `;
+            letrasContainer.insertAdjacentHTML('beforeend', letraHtml);
+        }
+    });
+</script>
+
+</body>
+</html>

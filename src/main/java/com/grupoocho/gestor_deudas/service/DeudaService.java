@@ -71,18 +71,21 @@ public class DeudaService {
         LocalDate now = LocalDate.now();
         YearMonth currentYearMonth = YearMonth.from(now);
 
-        // Obtener todas las deudas y ordenarlas por fecha de vencimiento
-        List<Deuda> deudasOrdenadas = ordenarPorFecha(deudaRepository.findAll());
+        // Obtener todas las deudas
+        List<Deuda> deudas = deudaRepository.findAll();
 
-        // Filtrar por deudas del mes actual y no pagadas
-        return deudasOrdenadas.stream()
+        // Filtrar por deudas del mes actual y no pagadas de meses anteriores
+        return deudas.stream()
                 .filter(deuda -> {
                     YearMonth deudaYearMonth = YearMonth.from(deuda.getFechaVencimiento());
                     return (deudaYearMonth.equals(currentYearMonth) ||
                             (deudaYearMonth.isBefore(currentYearMonth) && !deuda.isEstaPagado()));
                 })
+                .sorted(Comparator.comparing(Deuda::getFechaVencimiento))
                 .collect(Collectors.toList());
     }
+
+
 
     public List<Deuda> obtenerDeudasPorMes(int mes, int anio) {
         try {

@@ -4,18 +4,22 @@ let currentYear = new Date().getFullYear();
 
 // Función para obtener deudas desde el backend
 function fetchDeudas(mes, anio) {
-    if (mes && anio) {
-        fetch(`/api/deudas/por-mes?mes=${mes}&anio=${anio}`)
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1; // getMonth() devuelve 0 para enero, por eso se suma 1
+
+    if (!mes || !anio || (mes === currentMonth && anio === today.getFullYear())) {
+        fetch('/api/deudas/mes/nopagadas')
             .then(handleFetchResponse)
             .then(processDeudas)
             .catch(error => console.error('Error fetching deudas:', error));
     } else {
-        fetch('/api/deudas/mes/nopagadas')
+        fetch(`/api/deudas/por-mes?mes=${mes}&anio=${anio}`)
             .then(handleFetchResponse)
             .then(processDeudas)
             .catch(error => console.error('Error fetching deudas:', error));
     }
 }
+
 
 // Maneja la respuesta de la solicitud fetch
 function handleFetchResponse(response) {
@@ -143,7 +147,7 @@ function marcarComoPagada(deudaId) {
 
 // Redirige a la página de registro de deuda
 function redirigirRegistro() {
-    window.location.href = '/registrar_deuda.html';
+    window.location.href = '/html/registro_deuda.html';
 }
 
 // Función para avanzar al siguiente mes

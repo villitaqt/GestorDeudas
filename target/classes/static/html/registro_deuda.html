@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Deuda</title>
+    <link rel="stylesheet" href="../css/style_registrar.css">
+
+</head>
+<body>
+<div class ="container">
+    <h1>Registro de Deuda</h1>
+    <form id="formularioDeuda">
+        <label for="numeroDocumento">Número de Documento:</label><br>
+        <input type="text" id="numeroDocumento" name="numeroDocumento" required><br><br>
+
+        <label for="nombreDeudor">Nombre del Deudor:</label><br>
+        <input type="text" id="nombreDeudor" name="nombreDeudor" required><br><br>
+
+        <label for="nombreEmpresa">Nombre de la Empresa:</label><br>
+        <input type="text" id="nombreEmpresa" name="nombreEmpresa"><br><br>
+
+        <label for="fechaVencimiento">Fecha de Vencimiento:</label><br>
+        <input type="date" id="fechaVencimiento" name="fechaVencimiento" required><br><br>
+
+        <label for="monto">Monto:</label><br>
+        <input type="number" id="monto" name="monto" step="0.01" required><br><br>
+
+        <label for="imagen">URL de la Imagen:</label><br>
+        <input type="text" id="imagen" name="imagen"><br><br>
+
+        <label for="estaPagado">¿Está Pagado?</label><br>
+        <input type="checkbox" id="estaPagado" name="estaPagado"><br><br>
+
+        <button type="submit">Registrar Deuda</button>
+        <button type="button" onclick="window.history.back()">Volver</button>
+    </form>
+    <div id="mensaje"></div>
+</div>
+
+
+<script>
+    const formulario = document.getElementById('formularioDeuda');
+    const mensaje = document.getElementById('mensaje');
+
+    formulario.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(formulario);
+        const json = {};
+        formData.forEach((value, key) => { json[key] = value; });
+
+        fetch('/api/deudas', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(json)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al registrar la deuda');
+                }
+                return response.json();
+            })
+            .then(data => {
+                mensaje.textContent = 'Deuda registrada correctamente con ID: ' + data.id;
+                formulario.reset();
+            })
+            .catch(error => {
+                mensaje.textContent = 'Error: ' + error.message;
+            });
+    });
+</script>
+</body>
+</html>
