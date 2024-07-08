@@ -150,6 +150,14 @@ function redirigirRegistro() {
     window.location.href = '/html/registro_deuda.html';
 }
 
+function redirigirCronograma() {
+    window.location.href = '/html/mostrar_cronograma.html';
+}
+
+function redirigirRegistroCronograma() {
+    window.location.href = '/html/registro_cronograma.html';
+}
+
 // Función para avanzar al siguiente mes
 function avanzarMes() {
     if (currentMonth < 11) {

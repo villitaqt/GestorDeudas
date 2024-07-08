@@ -30,6 +30,16 @@ public class CronogramaController {
         return cronogramaService.getAllCronogramas();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Cronograma> getCronogramaById(@PathVariable Long id) {
+        Cronograma cronograma = cronogramaService.getCronogramaById(id);
+        if (cronograma != null) {
+            return ResponseEntity.ok(cronograma);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> postCronograma(@RequestBody Cronograma cronograma) {
         Cronograma nuevoCronograma =  cronogramaService.guardarCronograma(cronograma);

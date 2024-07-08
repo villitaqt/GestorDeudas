@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Cronogramas</title>
+    <link rel="stylesheet" href="../css/style_app.css">
+    <link rel="stylesheet" href="../css/cronograma.css">
+</head>
+<body>
+<div class="container">
+    <h1>Lista de Cronogramas</h1>
+    <div id="listaCronogramas">
+        <!-- Aquí se agregarán dinámicamente los cronogramas -->
+    </div>
+    <div id="detalleCronograma">
+        <!-- Aquí se mostrará el detalle del cronograma seleccionado -->
+    </div>
+    <div class="registrar">
+        <button onclick="redirigirRegistroCronograma()">Registrar Cronogramas</button>
+    </div>
+    <div class="registrar">
+        <button onclick="redirigirDeuda()">Ir a Deudas</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/cronograma')
+            .then(response => response.json())
+            .then(data => {
+                const listaCronogramas = document.getElementById('listaCronogramas');
+                const tableHtml = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Monto</th>
+                                <th>Interés</th>
+                                <th>Fecha de Desembolso</th>
+                                <th>Plazo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.map(cronograma => `
+                                <tr data-id="${cronograma.id}">
+                                    <td>${cronograma.id}</td>
+                                    <td>${cronograma.monto}</td>
+                                    <td>${cronograma.interes}%</td>
+                                    <td>${cronograma.fechaDesembolso}</td>
+                                    <td>${cronograma.plazo} meses</td>
+                                    <td><button onclick="verDetalle(${cronograma.id})">Ver Detalle</button></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                listaCronogramas.innerHTML = tableHtml;
+            })
+            .catch(error => {
+                console.error('Error al obtener la lista de cronogramas:', error);
+            });
+    });
+
+    function verDetalle(id) {
+        fetch(`/api/cronograma/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                const detalleCronograma = document.getElementById('detalleCronograma');
+                detalleCronograma.innerHTML = `
+                    <div class="card">
+                        <h2>Detalle del Cronograma ID: ${data.id}</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Vencimiento</th>
+                                    <th>Saldo</th>
+                                    <th>Capital</th>
+                                    <th>Interés</th>
+                                    <th>Cuota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.letras.map(letra => `
+                                    <tr>
+                                        <td>${letra.numero}</td>
+                                        <td>${letra.vencimiento}</td>
+                                        <td>${letra.saldo.toFixed(2)}</td>
+                                        <td>${letra.capital.toFixed(2)}</td>
+                                        <td>${letra.interes.toFixed(2)}</td>
+                                        <td>${letra.cuota.toFixed(2)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <button onclick="cerrarDetalle()">Cerrar</button>
+                    </div>
+                `;
+            })
+            .catch(error => {
+                console.error('Error al obtener el detalle del cronograma:', error);
+            });
+    }
+
+    function cerrarDetalle() {
+        const detalleCronograma = document.getElementById('detalleCronograma');
+        detalleCronograma.innerHTML = '';
+    }
+
+    function redirigirDeuda() {
+        window.location.href = '/html/app.html'; // Cambia esto por la ruta correcta
+    }
+    function redirigirRegistroCronograma() {
+        window.location.href = '/html/registro_cronograma.html'; // Cambia esto por la ruta correcta
+    }
+</script>
+</body>
+</html>

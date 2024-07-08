@@ -17,6 +17,10 @@ public class CronogramaService {
         this.cronogramaRepository = cronogramaRepository;
     }
 
+    public Cronograma getCronogramaById(Long id) {
+        return cronogramaRepository.findById(id).orElse(null);
+    }
+
     public List<Cronograma> getAllCronogramas() {
         return cronogramaRepository.findAll();
     }
