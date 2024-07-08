@@ -1,5 +1,0 @@
-com\grupoocho\gestor_deudas\service\DeudaService.class
-com\grupoocho\gestor_deudas\GestorDeudasApplication.class
-com\grupoocho\gestor_deudas\model\Deuda.class
-com\grupoocho\gestor_deudas\controller\DeudaController.class
-com\grupoocho\gestor_deudas\repository\DeudaRepository.class
