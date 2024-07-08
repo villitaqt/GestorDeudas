@@ -1,7 +1,8 @@
 package com.grupoocho.gestor_deudas.model;
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
+import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

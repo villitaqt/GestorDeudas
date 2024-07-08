@@ -6,7 +6,9 @@ import com.grupoocho.gestor_deudas.model.Letra;
 import com.grupoocho.gestor_deudas.repository.CronogramaRepository;
 import com.grupoocho.gestor_deudas.repository.DeudaRepository;
 import com.grupoocho.gestor_deudas.repository.LetraRepository;
-import jakarta.transaction.Transactional;
+import javax.persistence.*;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

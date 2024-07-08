@@ -1,6 +1,6 @@
 package com.grupoocho.gestor_deudas.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
