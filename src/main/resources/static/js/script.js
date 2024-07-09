@@ -128,7 +128,7 @@ function showDueTodayAlert(alertContainer, deuda) {
     const alert = document.createElement('div');
     alert.classList.add('alert', 'alert-danger');
     alert.innerHTML = `
-        Alerta: La deuda con número de documento ${deuda.numeroDocumento} de la empresa ${deuda.nombreEmpresa} vence hoy.
+        Error: La deuda con número de documento ${deuda.numeroDocumento} de la empresa ${deuda.nombreEmpresa} vence hoy.
     `;
     alertContainer.appendChild(alert);
 }
